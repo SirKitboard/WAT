@@ -5,4 +5,8 @@
         <!-- Customize your theme here. -->
     </style>
 
+	<style name="TransparentListView" parent="@android:style/Widget.ListView">
+		<item name="android:cacheColorHint">@android:color/transparent</item>
+	</style>
+
 </resources>
