@@ -1,17 +1,25 @@
 package io.github.adibalwani03.wat;
 
 import android.app.Activity;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 
 public class cameraTest extends Activity {
+	private Camera mCamera;
+	private CameraPreview cameraPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_test);
+		mCamera = getCameraInstance();
+	    cameraPreview = new CameraPreview(this, mCamera);
+	    FrameLayout frameLayout = (FrameLayout) findViewById(R.id.camera_preview);
+	    frameLayout.addView(cameraPreview);
     }
 
 
@@ -33,4 +41,15 @@ public class cameraTest extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+	public static Camera getCameraInstance(){
+		Camera c = null;
+		try {
+			c = Camera.open(); // attempt to get a Camera instance
+		}
+		catch (Exception e){
+			// Camera is not available (in use or does not exist)
+		}
+		return c; // returns null if camera is unavailable
+	}
 }
