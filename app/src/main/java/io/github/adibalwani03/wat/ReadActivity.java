@@ -2,11 +2,15 @@ package io.github.adibalwani03.wat;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +23,14 @@ import android.widget.Toast;
  * Created by Aditya on 10/11/2014.
  */
 public class ReadActivity extends Activity {
-
+	private final String TAG = "ReadActivity";
 	private TextView tv;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_read);
 
-		tv = (TextView) findViewById(R.id.textView1);
+		tv = (TextView) findViewById(R.id.textView4);
 
 		String id = getIntent().getStringExtra("id");
 		String[] projection = {"_id", "address", "date", "body"};
@@ -35,7 +39,12 @@ public class ReadActivity extends Activity {
 		Cursor c = getContentResolver().query(WAT.INBOX_URI, projection,
 				selection, selectionArgs, null);
 		if (c.moveToFirst()) {
-			setTitle(c.getString(c.getColumnIndex("address")));
+			String name = getContactName(this, c.getString(c.getColumnIndex("address")));
+			if(!name.equals(""))
+				setTitle(name);
+			else {
+				setTitle(c.getString(c.getColumnIndex("address")));
+			}
 			tv.setText(c.getString(c.getColumnIndex("body")));
 		}
 		CameraPreview cameraPreview = new CameraPreview(this, WAT.mCamera);
@@ -99,6 +108,33 @@ public class ReadActivity extends Activity {
 			p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
 			WAT.mCamera.setParameters(p);
 		}
+	}
+	private String getContactName(Context context, String number) {
+
+		String name = "";
+
+		// define the columns I want the query to return
+		String[] projection = new String[] {
+				ContactsContract.PhoneLookup.DISPLAY_NAME,
+				ContactsContract.PhoneLookup._ID};
+
+		// encode the phone number and build the filter URI
+		Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+
+		// query time
+		Cursor cursor = context.getContentResolver().query(contactUri, projection, null, null, null);
+
+		if(cursor != null) {
+			if (cursor.moveToFirst()) {
+				name =      cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+				Log.v(TAG, "Started uploadcontactphoto: Contact Found @ " + number);
+				Log.v(TAG, "Started uploadcontactphoto: Contact name  = " + name);
+			} else {
+				Log.v(TAG, "Contact Not Found @ " + number);
+			}
+			cursor.close();
+		}
+		return name;
 	}
 
 

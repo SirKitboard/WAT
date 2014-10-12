@@ -1,19 +1,27 @@
 package io.github.adibalwani03.wat;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextClock;
 import android.widget.TextView;
+
+import java.util.Date;
 
 /**
  * Created by Aditya on 10/11/2014.
@@ -21,7 +29,7 @@ import android.widget.TextView;
 public class MainActivity extends ListActivity {
 	private CameraPreview cameraPreview;
 	private Typeface font;
-
+	private final String TAG = "MainActivity";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +55,6 @@ public class MainActivity extends ListActivity {
 				c,
 				from,
 				to);
-
 		setListAdapter(adapter);
 	}
 
