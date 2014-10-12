@@ -40,8 +40,8 @@ public class ComposeActivity extends Activity {
 				try {
 					Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 					sendIntent.putExtra("sms_body", et1.getText().toString());
-					sendIntent.setType("vnd.android-dir/mms-sms");
-					startActivity(sendIntent);
+
+					startActivity(sendIntent);sendIntent.setType("vnd.android-dir/mms-sms");
 
 				} catch (ActivityNotFoundException e) {
 					showDialog(DIALOG_SENDTO);

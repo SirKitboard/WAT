@@ -12,14 +12,34 @@
 	<ScrollView
 		android:id="@+id/scrollView1"
 		android:layout_width="fill_parent"
-		android:layout_height="0dip"
-		android:layout_weight="1" >
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:background="#88000000">
 
 		<TextView
 			android:id="@+id/textView1"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:text="TextView" />
+			android:text="TextView"
+			android:textSize="30dp"/>
 	</ScrollView>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom">
+
+		<EditText
+			android:id="@+id/replybody"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"/>
+		<Button
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="Reply"
+			android:onClick="reply"
+			android:textColor="#FFFFFF"/>
+	</LinearLayout>
 
 </LinearLayout>
