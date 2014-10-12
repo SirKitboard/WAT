@@ -25,6 +25,7 @@ import android.widget.Toast;
 public class ReadActivity extends Activity {
 	private final String TAG = "ReadActivity";
 	private TextView tv;
+	String number = "";
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,8 +41,10 @@ public class ReadActivity extends Activity {
 				selection, selectionArgs, null);
 		if (c.moveToFirst()) {
 			String name = getContactName(this, c.getString(c.getColumnIndex("address")));
-			if(!name.equals(""))
+			if(!name.equals("")) {
+				number = c.getString(c.getColumnIndex("address"));
 				setTitle(name);
+			}
 			else {
 				setTitle(c.getString(c.getColumnIndex("address")));
 			}
@@ -70,13 +73,14 @@ public class ReadActivity extends Activity {
 		EditText et1 = (EditText)findViewById(R.id.replybody);
 		SmsManager manager = SmsManager.getDefault();
 		String body = et1.getText().toString();
-		if(!body.trim().equalsIgnoreCase("")) {
-			manager.sendTextMessage(to, null, body, null, null);
-			Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_SHORT).show();
-		}
-		else {
-			Toast.makeText(getApplicationContext(), "Invalid text", Toast.LENGTH_SHORT).show();
-		}
+		to = number;
+			if (!body.trim().equalsIgnoreCase("")) {
+				manager.sendTextMessage(to, null, body, null, null);
+				Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(), "Invalid text", Toast.LENGTH_SHORT).show();
+			}
+
 		finish();
 	}
 	@Override
