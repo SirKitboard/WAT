@@ -16,7 +16,7 @@
 	    <!-- BroadcastReceiver that listens for incoming SMS messages -->
 
         <activity
-            android:name=".cameraTest"
+            android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

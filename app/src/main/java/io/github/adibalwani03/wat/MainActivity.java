@@ -24,7 +24,7 @@ public class MainActivity extends ListActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 
-		font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans.ttf");
+		//font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans.ttf");
 	}
 
 	@Override
