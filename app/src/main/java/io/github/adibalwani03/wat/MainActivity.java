@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
@@ -17,19 +19,16 @@ import android.widget.TextView;
  * Created by Aditya on 10/11/2014.
  */
 public class MainActivity extends ListActivity {
-	private Camera mCamera;
 	private CameraPreview cameraPreview;
 	private Typeface font;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		mCamera = getCameraInstance();
-		cameraPreview = new CameraPreview(this, mCamera);
-		//FrameLayout frameLayout = (FrameLayout) findViewById(R.id.camera_preview1);
-		//frameLayout.addView(cameraPreview);
+		cameraPreview = new CameraPreview(this, WAT.mCamera);
+		FrameLayout frameLayout = (FrameLayout) findViewById(R.id.camera_preview1);
+		frameLayout.addView(cameraPreview);
 		//font = Typeface.createFromAsset(getAssets(), "fonts/OpenSans.ttf");
 	}
 
@@ -59,15 +58,42 @@ public class MainActivity extends ListActivity {
 		intent.putExtra("id", String.valueOf(id));
 		startActivity(intent);
 	}
-	public static Camera getCameraInstance(){
-		Camera c = null;
-		try {
-			c = Camera.open(); // attempt to get a Camera instance
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.flashcompose, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if(id == R.id.flashOn) {
+			turnFlash();
 		}
-		catch (Exception e){
-			e.printStackTrace();
+		else if (id == R.id.compose) {
+			newMessage();
 		}
-		return c; // returns null if camera is unavailable
+		return super.onOptionsItemSelected(item);
+	}
+	public void turnFlash() {
+		Camera.Parameters p = WAT.mCamera.getParameters();
+		if(p.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)) {
+			p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+			WAT.mCamera.setParameters(p);
+		}
+		else  {
+			p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+			WAT.mCamera.setParameters(p);
+		}
+	}
+	public void newMessage() {
+		Intent intent = new Intent(this,ComposeActivity.class );
+		startActivity(intent);
 	}
 }
 

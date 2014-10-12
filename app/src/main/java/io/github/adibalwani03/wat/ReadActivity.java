@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.database.Cursor;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +38,9 @@ public class ReadActivity extends Activity {
 			setTitle(c.getString(c.getColumnIndex("address")));
 			tv.setText(c.getString(c.getColumnIndex("body")));
 		}
+		CameraPreview cameraPreview = new CameraPreview(this, WAT.mCamera);
+		FrameLayout frameLayout = (FrameLayout) findViewById(R.id.camera_preview2);
+		frameLayout.addView(cameraPreview);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
@@ -54,14 +61,45 @@ public class ReadActivity extends Activity {
 		EditText et1 = (EditText)findViewById(R.id.replybody);
 		SmsManager manager = SmsManager.getDefault();
 		String body = et1.getText().toString();
-		if(body.trim().equalsIgnoreCase("")) {
+		if(!body.trim().equalsIgnoreCase("")) {
 			manager.sendTextMessage(to, null, body, null, null);
-			Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_SHORT);
+			Toast.makeText(getApplicationContext(), "Message sent", Toast.LENGTH_SHORT).show();
 		}
 		else {
-			Toast.makeText(getApplicationContext(), "Invalid text", Toast.LENGTH_SHORT);
+			Toast.makeText(getApplicationContext(), "Invalid text", Toast.LENGTH_SHORT).show();
 		}
 		finish();
 	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.flash2, menu);
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if(id == R.id.flashOn) {
+			turnFlash();
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	public void turnFlash() {
+		Camera.Parameters p = WAT.mCamera.getParameters();
+		if(p.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)) {
+			p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+			WAT.mCamera.setParameters(p);
+		}
+		else  {
+			p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+			WAT.mCamera.setParameters(p);
+		}
+	}
+
 
 }

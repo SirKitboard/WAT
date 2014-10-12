@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ReadActivity" >
+	<item android:id="@+id/flashOn"
+          android:title="Flash"
+          android:icon="@drawable/flash"
+          android:showAsAction="always"/>
+</menu>
